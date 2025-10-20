@@ -26,6 +26,7 @@ void addCell(t_list* list, t_cell* cell);
 void displayList(t_list* list);
 t_adjacency_list* createAdjacencyList(int size);
 void displayAdjacencyList(t_adjacency_list* adjacency_list);
+t_adjacency_list* readGraph(const char *filename);
 
 
 #endif
