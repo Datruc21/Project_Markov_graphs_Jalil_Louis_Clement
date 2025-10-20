@@ -69,6 +69,9 @@ t_adjacency_list* createAdjacencyList(int size) {
     t_adjacency_list* adjacency_list = malloc(sizeof(t_adjacency_list));
     adjacency_list->size = size;
     adjacency_list->lists = malloc(sizeof(t_list*) * size);
+    for (int i = 0; i < size; i++) {
+        adjacency_list->lists[i] = createEmptyList();
+    }
     return adjacency_list;
 }
 
@@ -101,16 +104,14 @@ t_adjacency_list* readGraph(const char *filename) {
     graph = createAdjacencyList(nbvert);
     while (fscanf(file, "%d %d %f", &start, &end, &proba) == 3)
     {
+        addCell(graph->lists[start-1], createCell(end,proba));
         // we obtain, for each line of the file, the values
         // start, end and proba
         /*Add the edge that runs from 'start' to ‘end’ with the
         probability 'proba' to the adjacency list*/
-
         }
     fclose(file);
     return graph;
 }
 
 
-/*for nbvertices time
- *store first occurence of a certain vertices
