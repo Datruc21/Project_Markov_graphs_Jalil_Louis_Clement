@@ -3,6 +3,6 @@
 #include <stdlib.h>
 
 int main() {
-    displayList(readGraph("../data/exemple1.txt"));
+    displayAdjacencyList(readGraph("../data/exemple1.txt"));
     return 0;
 }

@@ -58,7 +58,7 @@ void addCell(t_list* list, t_cell* cell) {
 void displayList(t_list* list) {
     printf("[head @]");
     t_cell* temp = list->head;
-    while (temp->next != NULL) {
+    while (temp != NULL) {
         printf("->");
         printf("(%d, %f)",temp->arrivalVertex,temp->probability);
         temp = temp->next;
