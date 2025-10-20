@@ -114,4 +114,33 @@ t_adjacency_list* readGraph(const char *filename) {
     return graph;
 }
 
+void isMarkovGraph(t_adjacency_list* adjacency_list) {
+    int markov = 1;int i = 0; float sum;
+    while (i < adjacency_list->size && markov) {
+        sum = 0;
+        t_cell* cell = adjacency_list->lists[i]->head;
+        while (cell != NULL) {
+            sum += cell->probability;
+            cell = cell->next;
+        }
+        if ((0.99>sum) || (1.00<sum)) {
+            markov = 0;
+        }
+        i++;
+    }
+    if (markov) {
+        printf("It is a Markov graph");
+    } else {
+        printf("It is not a Markov graph\n");
+        printf("The sum of the probabilities of vertex %d is %f",i,sum);
+    }
+}
 
+/*while ((cell != NULL) && markov) {
+    sum += cell->probability;
+    cell = cell->next;
+}
+if ((0.99>sum) || (1.00<sum)) {
+    markov = 0;
+    wrong_sum = sum;
+}*/

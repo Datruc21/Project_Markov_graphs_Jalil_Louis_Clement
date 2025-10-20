@@ -3,6 +3,6 @@
 #include <stdlib.h>
 
 int main() {
-    displayAdjacencyList(readGraph("../data/exemple1.txt"));
+    isMarkovGraph(readGraph("../data/exemple1.txt"));
     return 0;
 }
