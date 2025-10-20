@@ -136,11 +136,26 @@ void isMarkovGraph(t_adjacency_list* adjacency_list) {
     }
 }
 
-/*while ((cell != NULL) && markov) {
-    sum += cell->probability;
-    cell = cell->next;
+void representationGraph(t_adjacency_list* adjacency_list) {
+    FILE* f;
+    f = fopen("../data/Output.txt", "w");
+    if (f == NULL) {
+        printf("Error while writing the file!\n");
+        return;
+    } else {
+        char parameters[100] = "---\nconfig:\n\tlayout: elk\n\ttheme: neo\n\tlook: neo\n---\n\nflowchart LR\n";
+        fprintf(f, "%s", parameters);
+        for (int i = 0; i < adjacency_list->size; i++) {
+            fprintf(f,"%s((%d))\n",getID(i+1),i+1);
+        }
+        for (int i = 0; i < adjacency_list->size; i++) {
+            t_cell* edges = adjacency_list->lists[i]->head;
+            while (edges != NULL) {
+                fprintf(f,"%s -->|%f|",getID(i+1),edges->probability);
+                fprintf(f,"%s\n",getID(edges->arrivalVertex));
+                edges = edges->next;
+            }
+        }
+    }
 }
-if ((0.99>sum) || (1.00<sum)) {
-    markov = 0;
-    wrong_sum = sum;
-}*/
+

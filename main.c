@@ -3,6 +3,6 @@
 #include <stdlib.h>
 
 int main() {
-    isMarkovGraph(readGraph("../data/exemple1.txt"));
+    representationGraph(readGraph("../data/exemple1.txt"));
     return 0;
 }
