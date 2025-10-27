@@ -42,6 +42,7 @@ t_list* createEmptyList() {
     return list;
 }
 
+/*
 void addCell(t_list* list, t_cell* cell) {
     if (list->head == NULL) {
         list->head = cell;
@@ -54,13 +55,20 @@ void addCell(t_list* list, t_cell* cell) {
         temp->next = cell;
     }
 }
+*/
+void addCell(t_list* list, t_cell* cell) {
+    if (cell != NULL) {
+        cell->next = list->head;
+        list->head = cell;
+    }
+}
 
 void displayList(t_list* list) {
     printf("[head @]");
     t_cell* temp = list->head;
     while (temp != NULL) {
         printf("->");
-        printf("(%d, %f)",temp->arrivalVertex,temp->probability);
+        printf("(%d, %.2f)",temp->arrivalVertex,temp->probability);
         temp = temp->next;
     }
 }
@@ -99,9 +107,11 @@ t_adjacency_list* readGraph(const char *filename) {
     if (fscanf(file, "%d", &nbvert) != 1)
     {
         perror("Could not read number of vertices");
+        fclose(file);
         exit(EXIT_FAILURE);
     }
     graph = createAdjacencyList(nbvert);
+
     while (fscanf(file, "%d %d %f", &start, &end, &proba) == 3)
     {
         addCell(graph->lists[start-1], createCell(end,proba));
@@ -109,30 +119,33 @@ t_adjacency_list* readGraph(const char *filename) {
         // start, end and proba
         /*Add the edge that runs from 'start' to ‘end’ with the
         probability 'proba' to the adjacency list*/
-        }
+    }
     fclose(file);
     return graph;
 }
 
 void isMarkovGraph(t_adjacency_list* adjacency_list) {
-    int markov = 1;int i = 0; float sum;
-    while (i < adjacency_list->size && markov) {
-        sum = 0;
+    int is_markov = 1;
+    for (int i = 0; i < adjacency_list->size; i++) {
+        float sum = 0.0f;
         t_cell* cell = adjacency_list->lists[i]->head;
         while (cell != NULL) {
             sum += cell->probability;
             cell = cell->next;
         }
-        if ((0.99>sum) || (1.00<sum)) {
-            markov = 0;
+
+        // Le sujet précise "entre 0.99 et 1", ce qui semble inclure 1.
+        // La version de tes camarades excluait 1.0. Corrigons cela aussi.
+        if (sum < 0.99 || sum > 1.0) {
+            printf("The graph is not a Markov graph\n");
+            printf("the sum of the probabilities of vertex %d is %.2f\n", i + 1, sum);
+            is_markov = 0;
+            break; // On a trouvé une erreur, on arrête la vérification.
         }
-        i++;
     }
-    if (markov) {
-        printf("It is a Markov graph");
-    } else {
-        printf("It is not a Markov graph\n");
-        printf("The sum of the probabilities of vertex %d is %f",i,sum);
+
+    if (is_markov) {
+        printf("The graph is a Markov graph\n");
     }
 }
 
@@ -158,4 +171,3 @@ void representationGraph(t_adjacency_list* adjacency_list) {
         }
     }
 }
-
