@@ -40,6 +40,12 @@ struct s_partition {
 };
 typedef struct s_partition t_partition;
 
+struct s_stack {
+    t_tarjan_vertex** vertices;
+    int nb_vertices;
+};
+typedef struct s_stack t_stack;
+
 p_cell createCell(int arrivalVertex, float probability);
 t_list* createEmptyList();
 void addCell(t_list* list, t_cell* cell);
@@ -49,6 +55,13 @@ void displayAdjacencyList(t_adjacency_list* adjacency_list);
 t_adjacency_list* readGraph(const char *filename);
 void isMarkovGraph(t_adjacency_list* adjacency_list);
 void representationGraph(t_adjacency_list* adjacency_list);
+t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list);
+t_stack* createStack(int);
+void pushStack(t_stack* stack, t_tarjan_vertex* vertex);
+t_tarjan_vertex* popStack(t_stack* stack);
+
+
+t_partition tarjanAlgorithm(t_adjacency_list adjacency_list);
 
 
 #endif
