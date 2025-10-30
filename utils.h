@@ -20,6 +20,26 @@ struct s_adjacency_list {
 };
 typedef struct s_adjacency_list t_adjacency_list;
 
+struct s_tarjan_vertex {
+    int id;
+    int number;
+    int link;
+    int instack;
+};
+typedef struct s_tarjan_vertex t_tarjan_vertex;
+
+
+struct s_class {
+  char* name;
+  t_tarjan_vertex** vertices;
+};
+typedef struct s_class t_class;
+
+struct s_partition {
+    t_class** classes;
+};
+typedef struct s_partition t_partition;
+
 p_cell createCell(int arrivalVertex, float probability);
 t_list* createEmptyList();
 void addCell(t_list* list, t_cell* cell);
