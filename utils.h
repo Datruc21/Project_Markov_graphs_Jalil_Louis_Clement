@@ -25,6 +25,7 @@ struct s_tarjan_vertex {
     int number;
     int link;
     int instack;
+    struct s_tarjan_vertex* next;
 };
 typedef struct s_tarjan_vertex t_tarjan_vertex;
 
@@ -43,6 +44,7 @@ typedef struct s_partition t_partition;
 struct s_stack {
     t_tarjan_vertex** vertices;
     int nb_vertices;
+    int size;
 };
 typedef struct s_stack t_stack;
 
