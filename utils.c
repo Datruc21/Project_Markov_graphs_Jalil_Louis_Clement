@@ -180,7 +180,6 @@ t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list T) {
         vertex->number = -1;
         vertex->link = -1;
         vertex->instack = 0;
-        vertex->successors = T.lists[i];
         vertex_array[i] = vertex;
     }
     return vertex_array;
@@ -208,23 +207,77 @@ t_tarjan_vertex* popStack(t_stack* stack) {
 
 }
 
+t_class* createClass(int size, char* name) {
+    t_class* cls = malloc(sizeof(t_class)*size);
+    strcpy(cls->name, name);
+    cls->size = size;
+    cls->vertices = malloc(sizeof(t_tarjan_vertex*)*size);
+    cls->count = 0;
+    return cls;
+}
 
-void parcours(t_tarjan_vertex* v, int num, t_partition* classes, t_stack* stack){ //should return num+1
+t_partition* createPartition(int size) {
+    t_partition* partition = (t_partition*)malloc(sizeof(t_partition)*size);
+    partition->size = size;
+    partition->classes = (t_class**)malloc(sizeof(t_class*)*size);
+    partition->count = 0;
+    return partition;
+}
+
+int min(int a,int b) {
+    if (a > b) {
+        return b;
+    }
+    return a;
+}
+
+
+
+void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int num, t_partition* partition, t_stack* stack, t_adjacency_list T){ //should return num+1
     v->number = num;
     v->link = num;
     num++;
     pushStack(stack,v);
     v->instack = 1;
-
-
-
+    //Go through v->successors (linked list) and check each time number arrivalVertex with the other tarjans ids
+    t_list* successors = T.lists[v->id];
+    p_cell cell = successors->head;
+    while (cell != NULL) {
+        int index = cell->arrivalVertex;
+        t_tarjan_vertex* w = array[index];
+        if (w->number == -1) {
+            parcours(array,w,num,partition,stack,T);
+            v->link = min(v->link,w->link);
+        }
+        else if (w->instack == 1) {
+            v->link = min(v->link,w->number);
+        }
+        cell = cell->next;
+    }
+    if (v->number == v->link) {
+        //Create an empty class
+        t_tarjan_vertex* w = popStack(stack);
+        w->instack = 0;
+        //add w to empty class
+        t_class* class = createClass(T.size, " ");
+        while (w != v) {
+            class->vertices[class->count++] = w;
+            t_tarjan_vertex* w = popStack(stack);
+            w->instack = 0;
+        }
+        //add class to partition
+        partition->classes[partition->count] = class;
+    }
 
 }
 
-t_partition tarjanAlgorithm(t_adjacency_list adjacency_list) {
+t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
     int num = 0;
     t_stack* stack = createStack(20);
-    t_partition* result;
-
-
+    t_partition* result = createPartition(adjacency_list.size);
+    t_tarjan_vertex** vertices = createTarjanVertexArray(adjacency_list);
+    for (int i = 0; i<adjacency_list.size; i++) {
+        parcours(vertices,vertices[i],num,result,stack,adjacency_list);
+    }
+    return result;
 }

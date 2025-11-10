@@ -25,21 +25,22 @@ struct s_tarjan_vertex {
     int number;
     int link;
     int instack;
-    t_list* successors;
 };
 typedef struct s_tarjan_vertex t_tarjan_vertex;
 
 
 struct s_class {
-  char* name;
+  char name[10];
   t_tarjan_vertex** vertices;
     int size;
+    int count;
 };
 typedef struct s_class t_class;
 
 struct s_partition {
     t_class** classes;
     int size;
+    int count;
 };
 typedef struct s_partition t_partition;
 
@@ -59,13 +60,15 @@ void displayAdjacencyList(t_adjacency_list* adjacency_list);
 t_adjacency_list* readGraph(const char *filename);
 void isMarkovGraph(t_adjacency_list* adjacency_list);
 void representationGraph(t_adjacency_list* adjacency_list);
+
+
 t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list);
 t_stack* createStack(int);
 void pushStack(t_stack* stack, t_tarjan_vertex* vertex);
 t_tarjan_vertex* popStack(t_stack* stack);
-
-
-t_partition tarjanAlgorithm(t_adjacency_list adjacency_list);
+t_class* createClass(int size, char* name);
+t_partition* createPartition(int size);
+t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list);
 
 
 #endif
