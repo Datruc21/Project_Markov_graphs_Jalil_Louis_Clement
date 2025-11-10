@@ -187,6 +187,7 @@ t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list T) {
 
 t_stack* createStack(int n) {
     t_stack* stack = (t_stack*)malloc(sizeof(t_stack)*n);
+    stack->vertices = (t_tarjan_vertex**)malloc(sizeof(t_tarjan_vertex*)*n);
     stack->nb_vertices = 0;
     stack->size = n;
     return stack;
@@ -266,7 +267,7 @@ void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int num, t_partition* 
             w->instack = 0;
         }
         //add class to partition
-        partition->classes[partition->count] = class;
+        partition->classes[partition->count++] = class;
     }
 
 }
@@ -279,6 +280,8 @@ t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
     for (int i = 0; i<adjacency_list.size; i++) {
         parcours(vertices,vertices[i],num,result,stack,adjacency_list);
     }
+    free(stack->vertices);
+    free(stack);
     return result;
 }
 
