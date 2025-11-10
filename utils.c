@@ -196,25 +196,25 @@ void pushStack(t_stack* stack, t_tarjan_vertex* vertex) {
     if (stack && stack->nb_vertices < stack->size) {
         stack[stack->nb_vertices] = vertex;
         stack->nb_vertices++;
-        vertex->instack = 1;
     }
 }
 
 t_tarjan_vertex* popStack(t_stack* stack) {
     t_tarjan_vertex *vertex = stack->vertices[stack->nb_vertices];
     stack->nb_vertices--;
-    vertex->instack = 0;
     return vertex;
 
 }
 
 
-void parcours(t_tarjan_vertex* v, int num, t_partition* classes, t_stack* stack){
+void parcours(t_tarjan_vertex* v, int num, t_partition* classes, t_stack* stack){ //should return num+1
     v->number = num;
     v->link = num;
     num++;
     pushStack(stack,v);
     v->instack = 1;
+
+
 
 
 }
