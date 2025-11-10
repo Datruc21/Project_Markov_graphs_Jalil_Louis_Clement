@@ -296,3 +296,25 @@ void displayPartition(t_partition* partition) {
         printf("}\n");
     }
 }
+
+void freePartition(t_partition* partition) {
+    if (partition == NULL) {
+        return;
+    }
+
+    // 1. Libérer chaque classe individuellement
+    for (int i = 0; i < partition->count; i++) {
+        if (partition->classes[i] != NULL) {
+            // 1a. Libérer le tableau de sommets de la classe
+            free(partition->classes[i]->vertices);
+            // 1b. Libérer la structure de la classe elle-même
+            free(partition->classes[i]);
+        }
+    }
+
+    // 2. Libérer le tableau de pointeurs vers les classes
+    free(partition->classes);
+
+    // 3. Libérer la structure de partition elle-même
+    free(partition);
+}

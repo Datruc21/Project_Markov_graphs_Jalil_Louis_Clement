@@ -69,6 +69,7 @@ t_tarjan_vertex* popStack(t_stack* stack);
 t_class* createClass(int size, char* name);
 t_partition* createPartition(int size);
 t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list);
+void freePartition(t_partition* partition);
 
 
 #endif
