@@ -236,10 +236,10 @@ int min(int a,int b) {
 
 
 
-void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int num, t_partition* partition, t_stack* stack, t_adjacency_list T){ //should return num+1
-    v->number = num;
-    v->link = num;
-    num++;
+void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int* num, t_partition* partition, t_stack* stack, t_adjacency_list T){ //should return num+1
+    v->number = *num;
+    v->link = *num;
+    *num++;
     printf("6");
     pushStack(stack,v);
     printf("7");
@@ -291,7 +291,7 @@ t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
     printf("4");
     for (int i = 0; i<adjacency_list.size; i++) {
         printf("5");
-        parcours(vertices,vertices[i],num,result,stack,adjacency_list);
+        parcours(vertices,vertices[i],&num,result,stack,adjacency_list);
         printf("12");
     }
     free(stack->vertices);
@@ -305,7 +305,7 @@ void displayPartition(t_partition* partition) {
     for (int i = 0; i < partition->count; i++) {
         printf("Component C%d: {", i + 1);
         for (int j = 0; j < partition->classes[i]->count; j++) {
-            printf("%d", partition->classes[i]->vertices[j]);
+            //printf("%d", partition->classes[i]->vertices[j]);
             if (j < partition->classes[i]->count - 1) {
                 printf(",");
             }
