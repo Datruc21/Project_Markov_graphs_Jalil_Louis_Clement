@@ -175,11 +175,12 @@ void representationGraph(t_adjacency_list* adjacency_list) {
 t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list T) {
     t_tarjan_vertex** vertex_array = (t_tarjan_vertex**)malloc(sizeof(t_tarjan_vertex*)*T.size);
     for (int i = 0; i<T.size; i++) {
-        t_tarjan_vertex* vertex;
-        vertex->id = T[i]->arrivalVertex;
+        t_tarjan_vertex* vertex = (t_tarjan_vertex*)malloc(sizeof(t_tarjan_vertex));
+        vertex->id = i;
         vertex->number = -1;
         vertex->link = -1;
         vertex->instack = 0;
+        vertex->successors = T.lists[i];
         vertex_array[i] = vertex;
     }
     return vertex_array;
@@ -192,9 +193,10 @@ t_stack* createStack(int n) {
     return stack;
 }
 
+
 void pushStack(t_stack* stack, t_tarjan_vertex* vertex) {
     if (stack && stack->nb_vertices < stack->size) {
-        stack[stack->nb_vertices] = vertex;
+        stack->vertices[stack->nb_vertices] = vertex;
         stack->nb_vertices++;
     }
 }
@@ -221,7 +223,7 @@ void parcours(t_tarjan_vertex* v, int num, t_partition* classes, t_stack* stack)
 
 t_partition tarjanAlgorithm(t_adjacency_list adjacency_list) {
     int num = 0;
-    t_stack stack = createStack();
+    t_stack* stack = createStack(20);
     t_partition* result;
 
 

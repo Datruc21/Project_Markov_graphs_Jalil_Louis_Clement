@@ -25,7 +25,7 @@ struct s_tarjan_vertex {
     int number;
     int link;
     int instack;
-    struct s_tarjan_vertex* next;
+    t_list* successors;
 };
 typedef struct s_tarjan_vertex t_tarjan_vertex;
 
