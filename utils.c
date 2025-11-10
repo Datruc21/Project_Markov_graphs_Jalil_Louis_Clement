@@ -176,7 +176,7 @@ t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list T) {
     t_tarjan_vertex** vertex_array = (t_tarjan_vertex**)malloc(sizeof(t_tarjan_vertex*)*T.size);
     for (int i = 0; i<T.size; i++) {
         t_tarjan_vertex* vertex;
-        vertex->id = i;
+        vertex->id = T[i]->arrivalVertex;
         vertex->number = -1;
         vertex->link = -1;
         vertex->instack = 0;
@@ -196,12 +196,14 @@ void pushStack(t_stack* stack, t_tarjan_vertex* vertex) {
     if (stack && stack->nb_vertices < stack->size) {
         stack[stack->nb_vertices] = vertex;
         stack->nb_vertices++;
+        vertex->instack = 1;
     }
 }
 
 t_tarjan_vertex* popStack(t_stack* stack) {
     t_tarjan_vertex *vertex = stack->vertices[stack->nb_vertices];
     stack->nb_vertices--;
+    vertex->instack = 0;
     return vertex;
 
 }
