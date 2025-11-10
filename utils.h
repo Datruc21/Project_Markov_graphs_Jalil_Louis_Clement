@@ -33,11 +33,13 @@ typedef struct s_tarjan_vertex t_tarjan_vertex;
 struct s_class {
   char* name;
   t_tarjan_vertex** vertices;
+    int size;
 };
 typedef struct s_class t_class;
 
 struct s_partition {
     t_class** classes;
+    int size;
 };
 typedef struct s_partition t_partition;
 
