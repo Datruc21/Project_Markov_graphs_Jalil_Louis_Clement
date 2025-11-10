@@ -202,10 +202,12 @@ void pushStack(t_stack* stack, t_tarjan_vertex* vertex) {
 }
 
 t_tarjan_vertex* popStack(t_stack* stack) {
-    t_tarjan_vertex *vertex = stack->vertices[stack->nb_vertices];
-    stack->nb_vertices--;
-    return vertex;
-
+    if (stack && stack->nb_vertices > 0) {
+        stack->nb_vertices--;
+        t_tarjan_vertex *vertex = stack->vertices[stack->nb_vertices];
+        return vertex;
+    }
+    return NULL;
 }
 
 t_class* createClass(int size, char* name) {
@@ -238,12 +240,15 @@ void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int num, t_partition* 
     v->number = num;
     v->link = num;
     num++;
+    printf("6");
     pushStack(stack,v);
+    printf("7");
     v->instack = 1;
     //Go through v->successors (linked list) and check each time number arrivalVertex with the other tarjans ids
     t_list* successors = T.lists[v->id];
     p_cell cell = successors->head;
     while (cell != NULL) {
+        printf("8");
         int index = cell->arrivalVertex;
         t_tarjan_vertex* w = array[index];
         if (w->number == -1) {
@@ -255,17 +260,20 @@ void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int num, t_partition* 
         }
         cell = cell->next;
     }
+    printf("9");
     if (v->number == v->link) {
         //Create an empty class
-        t_tarjan_vertex* w = popStack(stack);
-        w->instack = 0;
         //add w to empty class
         t_class* class = createClass(T.size, " ");
-        while (w != v) {
-            class->vertices[class->count++] = w;
+        t_tarjan_vertex* w;
+        do {
+            printf("10");
             t_tarjan_vertex* w = popStack(stack);
             w->instack = 0;
-        }
+            class->vertices[class->count++] = w;
+        } while (w != v);
+
+        printf("11");
         //add class to partition
         partition->classes[partition->count++] = class;
     }
@@ -274,11 +282,17 @@ void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int num, t_partition* 
 
 t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
     int num = 0;
+    printf("1");
     t_stack* stack = createStack(20);
+    printf("2");
     t_partition* result = createPartition(adjacency_list.size);
+    printf("3");
     t_tarjan_vertex** vertices = createTarjanVertexArray(adjacency_list);
+    printf("4");
     for (int i = 0; i<adjacency_list.size; i++) {
+        printf("5");
         parcours(vertices,vertices[i],num,result,stack,adjacency_list);
+        printf("12");
     }
     free(stack->vertices);
     free(stack);
