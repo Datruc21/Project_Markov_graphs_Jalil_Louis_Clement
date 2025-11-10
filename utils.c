@@ -281,3 +281,18 @@ t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
     }
     return result;
 }
+
+// Fonction pour afficher le résultat
+void displayPartition(t_partition* partition) {
+    printf("Found %d strongly connected components:\n", partition->count);
+    for (int i = 0; i < partition->count; i++) {
+        printf("Component C%d: {", i + 1);
+        for (int j = 0; j < partition->classes[i]->count; j++) {
+            printf("%d", partition->classes[i]->vertices[j]);
+            if (j < partition->classes[i]->count - 1) {
+                printf(",");
+            }
+        }
+        printf("}\n");
+    }
+}

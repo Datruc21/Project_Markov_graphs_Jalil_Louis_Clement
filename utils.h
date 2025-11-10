@@ -60,7 +60,7 @@ void displayAdjacencyList(t_adjacency_list* adjacency_list);
 t_adjacency_list* readGraph(const char *filename);
 void isMarkovGraph(t_adjacency_list* adjacency_list);
 void representationGraph(t_adjacency_list* adjacency_list);
-
+void displayPartition(t_partition* partition);
 
 t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list);
 t_stack* createStack(int);

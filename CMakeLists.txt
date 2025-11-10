@@ -6,3 +6,5 @@ set(CMAKE_C_STANDARD 11)
 add_executable(TI_301_PJT
         main.c utils.c)
 
+add_executable(TI_301_PJT_part2
+        main2.c utils.c)
