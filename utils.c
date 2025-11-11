@@ -282,6 +282,7 @@ t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
     t_partition* result = createPartition(adjacency_list.size);
     t_tarjan_vertex** vertices = createTarjanVertexArray(adjacency_list);
     for (int i = 0; i<adjacency_list.size; i++) {
+        if (vertices[i]->number == -1)
         parcours(vertices,vertices[i],&num,result,stack,adjacency_list);
     }
     free(stack->vertices);
