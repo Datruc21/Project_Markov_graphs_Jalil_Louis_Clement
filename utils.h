@@ -30,7 +30,7 @@ typedef struct s_tarjan_vertex t_tarjan_vertex;
 
 
 struct s_class {
-  char name[10];
+  int id;
   t_tarjan_vertex** vertices;
     int size;
     int count;
@@ -44,7 +44,7 @@ struct s_partition {
 };
 typedef struct s_partition t_partition;
 
-struct s_stack {
+struct s_stack{
     t_tarjan_vertex** vertices;
     int nb_vertices;
     int size;
@@ -66,10 +66,11 @@ t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list);
 t_stack* createStack(int);
 void pushStack(t_stack* stack, t_tarjan_vertex* vertex);
 t_tarjan_vertex* popStack(t_stack* stack);
-t_class* createClass(int size, char* name);
+t_class* createClass(int size, int id);
 t_partition* createPartition(int size);
 t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list);
 void freePartition(t_partition* partition);
+int isVertexInClass(p_cell vertex, t_class* class);
 
 
 #endif

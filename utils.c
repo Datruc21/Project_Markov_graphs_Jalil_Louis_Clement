@@ -42,20 +42,7 @@ t_list* createEmptyList() {
     return list;
 }
 
-/*
-void addCell(t_list* list, t_cell* cell) {
-    if (list->head == NULL) {
-        list->head = cell;
-    }
-    else {
-        t_cell* temp = list->head;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = cell;
-    }
-}
-*/
+
 void addCell(t_list* list, t_cell* cell) {
     if (cell != NULL) {
         cell->next = list->head;
@@ -210,9 +197,9 @@ t_tarjan_vertex* popStack(t_stack* stack) {
     return NULL;
 }
 
-t_class* createClass(int size, char* name) {
+t_class* createClass(int size, int id) {
     t_class* cls = malloc(sizeof(t_class)*size);
-    strcpy(cls->name, name);
+    cls->id = id;
     cls->size = size;
     cls->vertices = malloc(sizeof(t_tarjan_vertex*)*size);
     cls->count = 0;
@@ -235,8 +222,7 @@ int min(int a,int b) {
 }
 
 
-
-void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int* num, t_partition* partition, t_stack* stack, t_adjacency_list T){ //should return num+1
+void parcours(t_tarjan_vertex** array, t_tarjan_vertex* v, int* num, t_partition* partition, t_stack* stack, t_adjacency_list T, int* id) {
     v->number = *num;
     v->link = *num;
     *num = *num + 1;
@@ -246,44 +232,48 @@ void parcours(t_tarjan_vertex** array,t_tarjan_vertex* v, int* num, t_partition*
     t_list* successors = T.lists[v->id];
     p_cell cell = successors->head;
     while (cell != NULL) {
-        int index = cell->arrivalVertex - 1;//added -1 here as normal vertex are indexed from 1, while tranjan ones from 0
+        int index = cell->arrivalVertex - 1; //added -1 here as normal vertex are indexed from 1, while tranjan ones from 0
         t_tarjan_vertex* w = array[index];
         if (w->number == -1) {
-            parcours(array,w,num,partition,stack,T);
-            v->link = min(v->link,w->link);
+            // Mise à jour de l'appel récursif (ajout de id)
+            parcours(array, w, num, partition, stack, T, id);
+            v->link = min(v->link, w->link);
         }
         else if (w->instack == 1) {
-            v->link = min(v->link,w->number);
+            v->link = min(v->link, w->number);
         }
         cell = cell->next;
     }
     if (v->number == v->link) {
         //Create an empty class
-        //add w to empty class
-        t_class* class = createClass(T.size, " ");
+
+        // Attribution de l'ID courant à la classe et incrémentation
+        t_class* class = createClass(T.size, *id);
+        (*id)++; // Incrémentation de l'ID pour la prochaine classe
+
         t_tarjan_vertex* w;
         do {
-            w = popStack(stack); //This was where the problem was
+            w = popStack(stack);
             w->instack = 0;
             class->vertices[class->count++] = w;
-            printf("%d\n",w->id);
+            printf("%d\n", w->id);
         } while (w != v);
 
-        printf("11");
         //add class to partition
         partition->classes[partition->count++] = class;
     }
-
 }
 
 t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
     int num = 0;
+    int class_id = 0;
+
     t_stack* stack = createStack(adjacency_list.size + 1);
     t_partition* result = createPartition(adjacency_list.size);
     t_tarjan_vertex** vertices = createTarjanVertexArray(adjacency_list);
-    for (int i = 0; i<adjacency_list.size; i++) {
+    for (int i = 0; i < adjacency_list.size; i++) {
         if (vertices[i]->number == -1)
-        parcours(vertices,vertices[i],&num,result,stack,adjacency_list);
+                parcours(vertices, vertices[i], &num, result, stack, adjacency_list, &class_id);
     }
     free(stack->vertices);
     free(stack);
@@ -294,7 +284,7 @@ t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
 void displayPartition(t_partition* partition) {
     printf("Found %d strongly connected components:\n", partition->count);
     for (int i = 0; i < partition->count; i++) {
-        printf("Component C%d: {", i + 1);
+        printf("%d Component C%d: {", partition->classes[i]->id ,i + 1);
         for (int j = 0; j < partition->classes[i]->count; j++) {
             printf("%d", partition->classes[i]->vertices[j]->id + 1);
             if (j < partition->classes[i]->count - 1) {
@@ -325,4 +315,12 @@ void freePartition(t_partition* partition) {
 
     // 3. Libérer la structure de partition elle-même
     free(partition);
+}
+
+int isVertexInClass(p_cell vertex, t_class* class) {
+    for (int i = 0; i<class->count; i++) {
+        if (vertex->arrivalVertex - 1  == class->vertices[i]->id)
+            return 1;
+    }
+    return 0;
 }
