@@ -105,7 +105,7 @@ void removeTransitiveLinks(t_link_array *p_link_array)
             i++;
         }
     }
-}n
+}
 
 
 void displayCharacteristics(t_adjacency_list* T) {
