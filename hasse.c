@@ -38,7 +38,7 @@ p_link_array makeHasseDiagram(t_adjacency_list* T) {
     t_partition* partition = tarjanAlgorithm(*T);
     for (int i = 0; i<T->size; i++) {
         t_class* classI = NULL;
-        for (int j = 0 ;j<partition->count; j++){
+        for (int j = 0; j<partition->count; j++){
             for (int k = 0; k < partition->classes[j]->count; k++) {
                 if (partition->classes[j]->vertices[k]->id == i) {
                     classI = partition->classes[j];
@@ -47,16 +47,15 @@ p_link_array makeHasseDiagram(t_adjacency_list* T) {
             }
             if (classI != NULL) break;
         }
-        p_cell current = T->lists[i]->head;//Now we must get through the others that are adjacent to it
+        p_cell current = T->lists[i]->head;
         while (current != NULL) {
             t_class* classK = NULL;
             for (int j = 0 ;j<partition->count; j++) {
                 if (isVertexInClass(current, partition->classes[j]))
                     classK = partition->classes[j];
             }
-            if (classK != NULL && classK->id != classI->id) {//Put condition to compare classK and classI
-                if (!isThereALink(link_array,classI,classK)) {//Put condition that link between classI and classK
-                    //Add the link (Ci,Cj) to the structure that stores the links
+            if (classK != NULL && classK->id != classI->id) {
+                if (!isThereALink(link_array,classI,classK)) {
                     link_array->links[link_array->log_size++] = createLink(classI->id, classK->id);
                 }
             }
@@ -167,6 +166,7 @@ void removeTransitiveLinks(t_link_array *p_link_array)
 
 }*/
 
+/*
 void displayCharacteristics(t_adjacency_list* T) {
     p_link_array link_array = makeHasseDiagram(T);
     t_partition* partition = tarjanAlgorithm(*T);
@@ -212,6 +212,47 @@ void displayCharacteristics(t_adjacency_list* T) {
     }
     freePartition(partition);
     freeLinkArray(link_array);
+}
+*/
+
+void displayCharacteristics(t_partition* partition, t_link_array* links) {
+    if (partition->count == 1) {
+        printf("The graph is irreducible.\n");
+    } else {
+        printf("The graph is not irreducible.\n");
+    }
+
+    for (int i = 0; i < partition->count; i++) {
+        t_class* curr = partition->classes[i];
+        int is_persistent = 1;
+        int j = 0;
+        while (j < links->log_size && is_persistent) {
+            if (links->links[j]->start == curr->id) {
+                is_persistent = 0;
+            }
+            j++;
+        }
+
+        printf("\nClass C%d {", curr->id + 1);
+        for (int k = 0; k < curr->count; k++) {
+            printf("%d", curr->vertices[k]->id + 1);
+            if (k < curr->count - 1) {
+                printf(", ");
+            }
+        }
+        printf("} is ");
+
+        if (is_persistent) {
+            printf("persistent.");
+            if (curr->count == 1) {
+                int absorbing_id = curr->vertices[0]->id;
+                printf("  - State %d is absorbing.", absorbing_id + 1);
+            }
+        } else {
+            printf("transitory.");
+        }
+    }
+    printf("\n");
 }
 
 void generateMermaidFile(const char* filename, t_partition* partition, t_link_array* links) {

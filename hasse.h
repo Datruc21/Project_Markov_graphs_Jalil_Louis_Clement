@@ -22,8 +22,10 @@ typedef struct s_link_array* p_link_array;
 p_link_array createLinkArray(int size);
 p_link_array makeHasseDiagram(t_adjacency_list* T);
 void removeTransitiveLinks(t_link_array *p_link_array);
-void displayCharacteristics(t_adjacency_list* T);
+//void displayCharacteristics(t_adjacency_list* T);
 void generateMermaidFile(const char* filename, t_partition* partition, t_link_array* links);
+void displayCharacteristics(t_partition* partition, t_link_array* links);
+
 
 /**
  * @brief Creates a link array from the given partition and graph.

@@ -256,7 +256,6 @@ void parcours(t_tarjan_vertex** array, t_tarjan_vertex* v, int* num, t_partition
             w = popStack(stack);
             w->instack = 0;
             class->vertices[class->count++] = w;
-            printf("%d\n", w->id);
         } while (w != v);
 
         //add class to partition

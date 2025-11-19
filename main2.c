@@ -35,8 +35,11 @@ int main() {
     char* mermaid_filename = "../data/hasse_diagram.txt";
     generateMermaidFile(mermaid_filename, scc_partition, links);
 
+    // Step 3 (part 2)
+    printf("\n--- Graph Characteristics (Step 3) ---\n");
+    displayCharacteristics(scc_partition, links);
+
     // --- Nettoyage de la mémoire ---
-    printf("\n--- Freeing memory ---\n");
     freePartition(scc_partition);
 
     return 0;
