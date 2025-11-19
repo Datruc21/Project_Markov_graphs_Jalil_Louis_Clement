@@ -66,9 +66,6 @@ p_link_array makeHasseDiagram(t_adjacency_list* T) {
     return link_array;
 }
 
-
-
-
 void removeTransitiveLinks(t_link_array *p_link_array)
 {
     int i = 0;
@@ -173,7 +170,7 @@ void removeTransitiveLinks(t_link_array *p_link_array)
 void displayCharacteristics(t_adjacency_list* T) {
     p_link_array link_array = makeHasseDiagram(T);
     t_partition* partition = tarjanAlgorithm(*T);
-    if (partititon->count == 1) {
+    if (partition->count == 1) {
         printf("The graph is irreducible\n");
     }
     else {
@@ -215,4 +212,37 @@ void displayCharacteristics(t_adjacency_list* T) {
     }
     freePartition(partition);
     freeLinkArray(link_array);
+}
+
+void generateMermaidFile(const char* filename, t_partition* partition, t_link_array* links) {
+    FILE* f = fopen(filename, "w");
+    if (f == NULL) {
+        perror("Error opening file for Mermaid diagram");
+        return;
+    }
+
+    fprintf(f, "flowchart LR\n\n");
+
+    for (int i = 0; i < partition->count; i++) {
+        t_class* current_class = partition->classes[i];
+        fprintf(f, "    C%d[\"{", current_class->id);
+
+        for (int j = 0; j < current_class->count; j++) {
+            fprintf(f, "%d", current_class->vertices[j]->id + 1);
+            if (j < current_class->count - 1) {
+                fprintf(f, ", ");
+            }
+        }
+        fprintf(f, "}\"]\n");
+    }
+
+    fprintf(f, "\n");
+
+    for (int i = 0; i < links->log_size; i++) {
+        t_link* link = links->links[i];
+        fprintf(f, "    C%d --> C%d\n", link->start, link->end);
+    }
+
+    fclose(f);
+    printf("Mermaid diagram generated in file: %s\n", filename);
 }
