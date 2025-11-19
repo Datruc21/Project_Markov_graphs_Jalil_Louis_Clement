@@ -73,4 +73,6 @@ void freePartition(t_partition* partition);
 int isVertexInClass(p_cell vertex, t_class* class);
 
 
+
+
 #endif
