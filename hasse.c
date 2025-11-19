@@ -18,6 +18,14 @@ int isThereALink(p_link_array T,t_class* I, t_class* J) {
     return 0;
 }
 
+void freeLinkArray(t_link_array* link_array) {
+    for (int i = 0; i < link_array->log_size; i++) {
+        free(link_array->links[i]);
+    }
+    free(link_array->links);
+    free(link_array);
+}
+
 t_link* createLink(int a, int b) {
     t_link* link = (t_link*)malloc(sizeof(t_link));
     link->start = a;
@@ -108,7 +116,7 @@ void removeTransitiveLinks(t_link_array *p_link_array)
 }
 
 
-void displayCharacteristics(t_adjacency_list* T) {
+/*void displayCharacteristics(t_adjacency_list* T) {
     p_link_array link_array = makeHasseDiagram(T);
     t_partition* partition = tarjanAlgorithm(*T);
     int from = 0;
@@ -160,4 +168,51 @@ void displayCharacteristics(t_adjacency_list* T) {
         }
     }
 
+}*/
+
+void displayCharacteristics(t_adjacency_list* T) {
+    p_link_array link_array = makeHasseDiagram(T);
+    t_partition* partition = tarjanAlgorithm(*T);
+    if (partititon->count == 1) {
+        printf("The graph is irreducible\n");
+    }
+    else {
+        printf("The graph is not irreducible\n");
+    }
+    for (int  i = 0; i<partition->count;i++){
+        t_class* classe = partition->classes[i];
+        int classe_id = classe->id;
+        int is_persistant = 1;
+
+        // Une classe est persistante si aucune transition ne sort d'elle vers une AUTRE classe.
+        // On vérifie s'il existe un lien (classe_id -> autre_classe_id) dans le diagramme de Hasse.
+        for (int k = 0; k<link_array->log_size;k++) {
+            t_link* lien = link_array->links[k];
+            if (lien->start == classe_id) {
+                // Un lien sort de cette classe vers une autre, donc elle est transitoire.
+                int is_persistant = 0;
+                break; // Sortir de la boucle des liens
+            }
+        }
+
+        if (is_persistant) {
+            printf("The class {");
+            for (int j = 0; j<classe->count; j++) {
+                printf(" %d ",classe->vertices[i]->id);
+            }
+            printf("} is persistent\n");
+            if (classe->count == 1) {
+               printf("State {%d} is absorbing\n", classe->vertices[i]->id);
+            }
+        }
+        else {
+            printf("The class {");
+            for (int j = 0; j<classe->count; j++) {
+                printf(" %d ",classe->vertices[i]->id);
+            }
+            printf("} is transient\n");
+        }
+    }
+    freePartition(partition);
+    freeLinkArray(link_array);
 }
