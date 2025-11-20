@@ -5,7 +5,7 @@
 
 int main() {
     // Step 1 : Create a graph
-    t_adjacency_list* graph = readGraph("../data/exemple_meteo.txt");
+    t_adjacency_list* graph = readGraph("../data/exemple1.txt");
 
     displayAdjacencyList(graph);
     printf("\n");
@@ -19,6 +19,7 @@ int main() {
         A = matrixMultiplication(matrix,matrix,graph->size);
     }
     displayMatrix(A, graph->size);
+
     // Step 2 : Check the graph
     printf("--- Validation of step 2 ---\n");
     isMarkovGraph(graph);

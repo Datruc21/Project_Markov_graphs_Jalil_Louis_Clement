@@ -12,3 +12,8 @@ add_executable(TI_301_PJT_part2
         main2.c utils.c hasse.c
         matrix.c
         matrix.h)
+
+add_executable(TI_301_PJT_part3
+        main3.c utils.c hasse.c
+        matrix.c
+        matrix.h)
