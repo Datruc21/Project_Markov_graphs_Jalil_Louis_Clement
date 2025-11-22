@@ -143,7 +143,7 @@ void representationGraph(t_adjacency_list* adjacency_list) {
         printf("Error while writing the file!\n");
         return;
     } else {
-        char parameters[100] = "---\nconfig:\n\tlayout: elk\n\ttheme: neo\n\tlook: neo\n---\n\nflowchart LR\n";
+        char parameters[100] = "---\nconfig:\nlayout: elk\ntheme: neo\nlook: neo\n---\n\nflowchart LR\n";
         fprintf(f, "%s", parameters);
         for (int i = 0; i < adjacency_list->size; i++) {
             fprintf(f,"%s((%d))\n",getID(i+1),i+1);
