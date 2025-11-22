@@ -64,8 +64,8 @@ The project uses **CMake** for the build process.
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repo-url>
-    cd <your-repo-folder>
+    git clone https://github.com/Datruc21/Project_Markov_graphs_Jalil_Louis_Clement.git
+    cd <repo-folder>
     ```
 
 The compilation generates three executables corresponding to the different stages of the project:
