@@ -29,6 +29,7 @@ int main() {
         float** submatrix = subMatrix(matrix,scc_partition,i);
         displayMatrix(submatrix, scc_partition->classes[i]->count);
         printf("\n");
+        printf("The period is : %d\n",getPeriod(submatrix,scc_partition->classes[i]->count));
         freeMatrix(submatrix, scc_partition->classes[i]->count);
     }
     freePartition(scc_partition);

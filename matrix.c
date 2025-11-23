@@ -18,7 +18,6 @@ float** createZeroMatrix(int size) {
 void copyMatrix(float** src, float** dest, int n) {
     for (int i = 0; i<n; i++) {
         for (int j = 0; j<n; j++) {
-            printf("%d %d \n",i,j);
             dest[i][j] = src[i][j];
         }
     }
@@ -45,6 +44,16 @@ void displayMatrix(float** matrix, int size) {
         }
         printf("\n");
     }
+}
+
+float** identityMatrix(int size) {
+    float** matrix = createZeroMatrix(size);
+    for (int i = 0; i<size; i++) {
+        for (int j = 0; j<size; j++) {
+            matrix[i][j] = (i == j) ? 1 : 0;
+        }
+    }
+    return matrix;
 }
 
 
@@ -122,11 +131,7 @@ int getPeriod(float** sub_matrix,int n) {
     int *periods = (int *)calloc(n , sizeof(int));
     int period_count = 0;
     int cpt = 1;
-    float** power_matrix = createZeroMatrix(n);
-    float** result_matrix = createZeroMatrix(n);
-    displayMatrix((power_matrix), n);
-    printf("\n");
-    displayMatrix((result_matrix), n);
+    float** power_matrix = identityMatrix(n);
     for (cpt = 1; cpt <= n; cpt++)
     {
         int diag_nonzero = 0;
@@ -141,11 +146,9 @@ int getPeriod(float** sub_matrix,int n) {
             periods[period_count] = cpt;
             period_count++;
         }
-        printf("d");
-        result_matrix = matrixMultiplication(power_matrix, sub_matrix, n);
-        printf("d");
-        copyMatrix(power_matrix, result_matrix, n);
-        printf("d");
+        float** result_matrix = matrixMultiplication(power_matrix, sub_matrix, n);
+        copyMatrix(result_matrix,power_matrix,n);
+        freeMatrix(result_matrix,n);
     }
     free(periods);
     freeMatrix(power_matrix, n);
