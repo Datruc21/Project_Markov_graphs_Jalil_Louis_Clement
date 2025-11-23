@@ -87,9 +87,9 @@ float** subMatrix(float** matrix, t_partition * part, int compo_index) {
     int counter2 = 0;
     float** submatrix = createZeroMatrix(part->classes[compo_index]->count);
     for (int i = 0; i<sizeof(matrix[0]); i++) {
-        if (  isIndexInClass(i+1, part->classes[compo_index])  ) {
+        if (  isIndexInClass(i, part->classes[compo_index])  ) {
             for (int j = 0; j<sizeof(matrix[i]); j++) {
-                if (  isIndexInClass(j+1, part->classes[compo_index]) ) {
+                if (  isIndexInClass(j, part->classes[compo_index]) ) {
                     submatrix[counter1][counter2] = matrix[i][j];
                     counter2++;
                 }

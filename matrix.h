@@ -12,7 +12,7 @@ float** createMatrix(t_adjacency_list* T);
 void displayMatrix(float** matrix, int size);
 void freeMatrix(float** matrix, int size);
 float** matrixMultiplication(float** A, float** B, int n);
-float** subMatrix(float** matrix, t_partition part, int compo_index);
+float** subMatrix(float** matrix, t_partition * part, int compo_index);
 
 
 
