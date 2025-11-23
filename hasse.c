@@ -78,6 +78,7 @@ p_link_array makeHasseDiagram(t_adjacency_list* T) {
     return link_array;
 }
 
+
 void removeTransitiveLinks(t_link_array *p_link_array)
 {
     int i = 0;
