@@ -113,6 +113,11 @@ void removeTransitiveLinks(t_link_array *p_link_array)
 
 
 void displayCharacteristics(t_partition* partition, t_link_array* links) {
+    /*Displays whether a class is persistent, absorbing, or transitory
+     *Moreover, displays whether the graph is irreducible or not
+     */
+
+    //If we have only 1 class
     if (partition->count == 1) {
         printf("The graph is irreducible.\n");
     } else {
@@ -129,7 +134,7 @@ void displayCharacteristics(t_partition* partition, t_link_array* links) {
             }
             j++;
         }
-
+        //Prints for each class
         printf("\nClass C%d {", curr->id + 1);
         for (int k = 0; k < curr->count; k++) {
             printf("%d", curr->vertices[k]->id + 1);
@@ -141,10 +146,12 @@ void displayCharacteristics(t_partition* partition, t_link_array* links) {
 
         if (is_persistent) {
             printf("persistent.");
+            //If persistent and only 1 in class, state is absorbing
             if (curr->count == 1) {
                 int absorbing_id = curr->vertices[0]->id;
                 printf("  - State %d is absorbing.", absorbing_id + 1);
             }
+        //If not persistent, transitory
         } else {
             printf("transitory.");
         }

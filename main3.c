@@ -28,8 +28,8 @@ int main() {
     for (int i = 0; i < scc_partition->count; i++) {
         float** submatrix = subMatrix(matrix,scc_partition,i);
         displayMatrix(submatrix, scc_partition->classes[i]->count);
-        printf("\n");
         printf("The period is : %d\n",getPeriod(submatrix,scc_partition->classes[i]->count));
+        printf("\n");
         freeMatrix(submatrix, scc_partition->classes[i]->count);
     }
     freePartition(scc_partition);

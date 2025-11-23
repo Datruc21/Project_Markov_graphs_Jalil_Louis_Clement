@@ -317,6 +317,7 @@ void freePartition(t_partition* partition) {
 }
 
 int isVertexInClass(p_cell vertex, t_class* class) {
+    //Checks if a vertex is in the class
     for (int i = 0; i<class->count; i++) {
         if (vertex->arrivalVertex - 1  == class->vertices[i]->id)
             return 1;
@@ -324,13 +325,6 @@ int isVertexInClass(p_cell vertex, t_class* class) {
     return 0;
 }
 
-int isIndexInClass(int index, t_class* class) {
-    for (int i = 0; i<class->count; i++) {
-        if (index  == class->vertices[i]->id)
-            return 1;
-    }
-    return 0;
-}
 
 int doesClassExist (t_partition * part, int index) {
     if ((index < 0) || ( part->count) <= index) {
