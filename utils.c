@@ -166,6 +166,7 @@ void representationGraph(t_adjacency_list* adjacency_list) {
     }
 }
 
+// creates an array containing pointers to tarjan vertex that we initialise
 t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list T) {
     t_tarjan_vertex** vertex_array = (t_tarjan_vertex**)malloc(sizeof(t_tarjan_vertex*)*T.size);
     for (int i = 0; i<T.size; i++) {
@@ -179,6 +180,7 @@ t_tarjan_vertex** createTarjanVertexArray(t_adjacency_list T) {
     return vertex_array;
 }
 
+// creates a stack used for the tarjan algorithm
 t_stack* createStack(int n) {
     t_stack* stack = (t_stack*)malloc(sizeof(t_stack)*n);
     stack->vertices = (t_tarjan_vertex**)malloc(sizeof(t_tarjan_vertex*)*n);
@@ -187,7 +189,7 @@ t_stack* createStack(int n) {
     return stack;
 }
 
-
+// pushes elements into the stack
 void pushStack(t_stack* stack, t_tarjan_vertex* vertex) {
     if (stack && stack->nb_vertices < stack->size) {
         stack->vertices[stack->nb_vertices] = vertex;
@@ -195,6 +197,7 @@ void pushStack(t_stack* stack, t_tarjan_vertex* vertex) {
     }
 }
 
+// pop the element at the top of the stack and returns its value
 t_tarjan_vertex* popStack(t_stack* stack) {
     if (stack && stack->nb_vertices > 0) {
         stack->nb_vertices--;
@@ -204,6 +207,7 @@ t_tarjan_vertex* popStack(t_stack* stack) {
     return NULL;
 }
 
+// creates a t_class and returns a pointer to it
 t_class* createClass(int size, int id) {
     t_class* cls = malloc(sizeof(t_class)*size);
     cls->id = id;
@@ -213,6 +217,7 @@ t_class* createClass(int size, int id) {
     return cls;
 }
 
+// creates a t_partition : initialize its fields and allocates memory for the classes that will be contained
 t_partition* createPartition(int size) {
     t_partition* partition = (t_partition*)malloc(sizeof(t_partition)*size);
     partition->size = size;
@@ -221,6 +226,7 @@ t_partition* createPartition(int size) {
     return partition;
 }
 
+// function that returns the minimum between to numbers
 int min(int a,int b) {
     if (a > b) {
         return b;
@@ -228,21 +234,21 @@ int min(int a,int b) {
     return a;
 }
 
-
+// parcours function of the tarjan algorithm. It basically does a DFS search and when it finds correspondance between links and numbers it pops the stack to get the whole class
 void parcours(t_tarjan_vertex** array, t_tarjan_vertex* v, int* num, t_partition* partition, t_stack* stack, t_adjacency_list T, int* id) {
     v->number = *num;
     v->link = *num;
     *num = *num + 1;
     pushStack(stack,v);
     v->instack = 1;
-    //Go through v->successors (linked list) and check each time number arrivalVertex with the other tarjans ids
+    // Go through v->successors (linked list) and check each time number arrivalVertex with the other tarjans ids
     t_list* successors = T.lists[v->id];
     p_cell cell = successors->head;
     while (cell != NULL) {
         int index = cell->arrivalVertex - 1; //added -1 here as normal vertex are indexed from 1, while tranjan ones from 0
         t_tarjan_vertex* w = array[index];
         if (w->number == -1) {
-            // Mise à jour de l'appel récursif (ajout de id)
+            // Update the id
             parcours(array, w, num, partition, stack, T, id);
             v->link = min(v->link, w->link);
         }
@@ -251,12 +257,12 @@ void parcours(t_tarjan_vertex** array, t_tarjan_vertex* v, int* num, t_partition
         }
         cell = cell->next;
     }
-    if (v->number == v->link) {
-        //Create an empty class
 
-        // Attribution de l'ID courant à la classe et incrémentation
+    if (v->number == v->link) {
+        // creates an empty class
+        // attributes the current ID to the class
         t_class* class = createClass(T.size, *id);
-        (*id)++; // Incrémentation de l'ID pour la prochaine classe
+        (*id)++; // increments the ID for the next class
 
         t_tarjan_vertex* w;
         do {
@@ -270,23 +276,28 @@ void parcours(t_tarjan_vertex** array, t_tarjan_vertex* v, int* num, t_partition
     }
 }
 
+// tarjan algorithm that calls the parcours function that we previously implemented
 t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list) {
+    // we initialize everything needed for the parcours function (stack, etc.)
     int num = 0;
     int class_id = 0;
 
     t_stack* stack = createStack(adjacency_list.size + 1);
     t_partition* result = createPartition(adjacency_list.size);
     t_tarjan_vertex** vertices = createTarjanVertexArray(adjacency_list);
+
     for (int i = 0; i < adjacency_list.size; i++) {
-        if (vertices[i]->number == -1)
-                parcours(vertices, vertices[i], &num, result, stack, adjacency_list, &class_id);
+        if (vertices[i]->number == -1) {
+            parcours(vertices, vertices[i], &num, result, stack, adjacency_list, &class_id);
+        }
     }
+
     free(stack->vertices);
     free(stack);
     return result;
 }
 
-// Fonction pour afficher le résultat
+// displays the partitions
 void displayPartition(t_partition* partition) {
     printf("Found %d strongly connected components:\n", partition->count);
     for (int i = 0; i < partition->count; i++) {
@@ -301,30 +312,29 @@ void displayPartition(t_partition* partition) {
     }
 }
 
+// to free and avoid as much memory leaks as possible ':-D
 void freePartition(t_partition* partition) {
     if (partition == NULL) {
         return;
     }
 
-    // 1. Libérer chaque classe individuellement
+    // 1. free each class individually
     for (int i = 0; i < partition->count; i++) {
         if (partition->classes[i] != NULL) {
-            // 1a. Libérer le tableau de sommets de la classe
             free(partition->classes[i]->vertices);
-            // 1b. Libérer la structure de la classe elle-même
             free(partition->classes[i]);
         }
     }
 
-    // 2. Libérer le tableau de pointeurs vers les classes
+    // 2. free the array of pointer to classes
     free(partition->classes);
 
-    // 3. Libérer la structure de partition elle-même
+    // 3. free the partition structure
     free(partition);
 }
 
+//Checks if a vertex is in the class
 int isVertexInClass(p_cell vertex, t_class* class) {
-    //Checks if a vertex is in the class
     for (int i = 0; i<class->count; i++) {
         if (vertex->arrivalVertex - 1  == class->vertices[i]->id)
             return 1;
@@ -332,7 +342,7 @@ int isVertexInClass(p_cell vertex, t_class* class) {
     return 0;
 }
 
-
+// checks if the class exists
 int doesClassExist (t_partition * part, int index) {
     if ((index < 0) || ( part->count) <= index) {
         return 0;
