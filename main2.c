@@ -9,7 +9,7 @@
 int main() {
     // Charger le graphe de l'exemple de validation
     //const char* filename = "../data/exemple_valid_step3.txt";
-    const char* filename = "../data/exemple3.txt";
+    const char* filename = "../data/exemple_hasse1.txt";
 
     t_adjacency_list* graph = readGraph(filename);
 
