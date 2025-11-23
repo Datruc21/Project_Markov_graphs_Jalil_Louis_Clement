@@ -155,10 +155,14 @@ int gcd(int *vals, int nbvals) {
 }
 
 int getPeriod(float** sub_matrix,int n) {
+    /* function to calculate the period of a submatrix
+     *
+     */
     int *periods = (int *)calloc(n , sizeof(int));
     int period_count = 0;
     int cpt = 1;
     float** power_matrix = identityMatrix(n);
+    //for loop to get the last non zero diagonal M^k(i,i) != 0, with k being the current step
     for (cpt = 1; cpt <= n; cpt++)
     {
         int diag_nonzero = 0;
@@ -173,12 +177,16 @@ int getPeriod(float** sub_matrix,int n) {
             periods[period_count] = cpt;
             period_count++;
         }
+        //the matrix multiplication of M^k * M with k being the current step, since M^k(i,i) > 0
+        // means that at k steps, you can return to yourself in the submatrix
         float** result_matrix = matrixMultiplication(power_matrix, sub_matrix, n);
         copyMatrix(result_matrix,power_matrix,n);
         freeMatrix(result_matrix,n);
     }
     freeMatrix(power_matrix, n);
-    int a = gcd(periods, period_count);
+    //the period A is the greatest common divisor of all the recorded powers k
+    int A = gcd(periods, period_count);
+    //clean up memory
     free(periods);
-    return a;
+    return A;
 }
