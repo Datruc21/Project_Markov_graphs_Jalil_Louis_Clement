@@ -118,8 +118,7 @@ int gcd(int *vals, int nbvals) {
     return result;
 }
 
-int getPeriod(float** sub_matrix) {
-    int n = sizeof(sub_matrix[0]);
+int getPeriod(float** sub_matrix,int n) {
     int *periods = (int *)calloc(n , sizeof(int));
     int period_count = 0;
     int cpt = 1;
@@ -143,7 +142,7 @@ int getPeriod(float** sub_matrix) {
             period_count++;
         }
         printf("d");
-        result_matrix == matrixMultiplication(power_matrix, sub_matrix, n);
+        result_matrix = matrixMultiplication(power_matrix, sub_matrix, n);
         printf("d");
         copyMatrix(power_matrix, result_matrix, n);
         printf("d");

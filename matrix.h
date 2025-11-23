@@ -14,7 +14,7 @@ void freeMatrix(float** matrix, int size);
 float** matrixMultiplication(float** A, float** B, int n);
 float** subMatrix(float** matrix, t_partition * part, int compo_index);
 int gcd(int *vals, int nbvals);
-int getPeriod(float** sub_matrix);
+int getPeriod(float** sub_matrix,int n);
 
 
 
