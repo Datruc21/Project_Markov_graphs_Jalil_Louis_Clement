@@ -323,3 +323,11 @@ int isVertexInClass(p_cell vertex, t_class* class) {
     }
     return 0;
 }
+
+int isIndexInClass(int index, t_class* class) {
+    for (int i = 0; i<class->count; i++) {
+        if (index  == class->vertices[i]->id)
+            return 1;
+    }
+    return 0;
+}
