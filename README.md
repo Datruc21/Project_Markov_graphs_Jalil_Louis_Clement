@@ -80,5 +80,5 @@ The compilation generates three executables corresponding to the different stage
 As permitted by the project guidelines, AI tools (ChatGPT/GitHub Copilot) were used for:
 *  **Debugging:** Assisting in resolving pointer logic errors within the linked lists.
 *  **Code Explanation:** Clarifying the recursive steps required for Tarjan's algorithm.
-*  **Documentation:** Writing this README.md file
+*  **Documentation:** Writing this README.md file and the Doxygen-style comments in the .h files.
 All logic was reviewed, understood, and integrated by the team members.
