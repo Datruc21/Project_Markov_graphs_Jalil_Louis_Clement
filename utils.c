@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "utils.h"
 
 static char *getID(int i)
@@ -28,6 +27,7 @@ static char *getID(int i)
     return buffer;
 }
 
+// creates a t_cell which is an edge of the graph
 p_cell createCell(int arrivalVertex, float probability) {
     p_cell cell = malloc(sizeof(t_cell));
     cell->arrivalVertex = arrivalVertex;
@@ -36,13 +36,14 @@ p_cell createCell(int arrivalVertex, float probability) {
     return cell;
 }
 
+// creates an empty linked list that will contain every outgoing edges of one vertex
 t_list* createEmptyList() {
     t_list *list = (t_list*)malloc(sizeof(t_list));
     list->head = NULL;
     return list;
 }
 
-
+// adds a t_cell at the head of the linked list (complexity O(1))
 void addCell(t_list* list, t_cell* cell) {
     if (cell != NULL) {
         cell->next = list->head;
@@ -50,6 +51,7 @@ void addCell(t_list* list, t_cell* cell) {
     }
 }
 
+// displays the linked list of a vertex with the visual format asked
 void displayList(t_list* list) {
     printf("[head @]");
     t_cell* temp = list->head;
@@ -60,6 +62,7 @@ void displayList(t_list* list) {
     }
 }
 
+// creates the adjacency list (an array containing the t_list of every vertex)
 t_adjacency_list* createAdjacencyList(int size) {
     t_adjacency_list* adjacency_list = malloc(sizeof(t_adjacency_list));
     adjacency_list->size = size;
@@ -70,6 +73,7 @@ t_adjacency_list* createAdjacencyList(int size) {
     return adjacency_list;
 }
 
+// displays the adjacency list
 void displayAdjacencyList(t_adjacency_list* adjacency_list) {
     for (int i = 0; i < adjacency_list->size; i++) {
         printf("List for vertex %d : ",i+1);
@@ -79,6 +83,7 @@ void displayAdjacencyList(t_adjacency_list* adjacency_list) {
     }
 }
 
+// creates the adjacency list of a graph by reading the graph from a text file
 t_adjacency_list* readGraph(const char *filename) {
     FILE *file = fopen(filename, "rt"); // read-only, text
     int nbvert, start, end;
@@ -111,6 +116,7 @@ t_adjacency_list* readGraph(const char *filename) {
     return graph;
 }
 
+// checks if the graph given is a markov graph (the sum of all probabilities equals to 1)
 void isMarkovGraph(t_adjacency_list* adjacency_list) {
     int is_markov = 1;
     for (int i = 0; i < adjacency_list->size; i++) {
@@ -136,6 +142,7 @@ void isMarkovGraph(t_adjacency_list* adjacency_list) {
     }
 }
 
+// generates the mermaid syntax to visualize the graph and write it into a text file ("../data/Output.txt")
 void representationGraph(t_adjacency_list* adjacency_list) {
     FILE* f;
     f = fopen("../data/Output.txt", "w");
