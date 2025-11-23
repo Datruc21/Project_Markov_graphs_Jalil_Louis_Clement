@@ -3,6 +3,7 @@
 
 int main() {
     // Step 1 : Create a graph
+    printf("--- Validation of step 1 ---\n");
     t_adjacency_list* graph = readGraph("../data/exemple1.txt");
     displayAdjacencyList(graph);
     printf("\n");
