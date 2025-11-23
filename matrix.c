@@ -85,18 +85,23 @@ void freeMatrix(float** A, int n) {
 float** subMatrix(float** matrix, t_partition * part, int compo_index) {
     int counter1 = 0;
     int counter2 = 0;
-    float** submatrix = createZeroMatrix(part->classes[compo_index]->count);
-    for (int i = 0; i<sizeof(matrix[0]); i++) {
-        if (  isIndexInClass(i, part->classes[compo_index])  ) {
-            for (int j = 0; j<sizeof(matrix[i]); j++) {
-                if (  isIndexInClass(j, part->classes[compo_index]) ) {
-                    submatrix[counter1][counter2] = matrix[i][j];
-                    counter2++;
+    if (doesClassExist(part,compo_index)) {
+        float** submatrix = createZeroMatrix(part->classes[compo_index]->count);
+        for (int i = 0; i<sizeof(matrix[0]); i++) {
+            if (  isIndexInClass(i, part->classes[compo_index])  ) {
+                for (int j = 0; j<sizeof(matrix[i]); j++) {
+                    if (  isIndexInClass(j, part->classes[compo_index]) ) {
+                        submatrix[counter1][counter2] = matrix[i][j];
+                        counter2++;
+                    }
                 }
+                counter1++;
+                counter2=0;
             }
-            counter1++;
-            counter2=0;
         }
+        return submatrix;
+    } else {
+        return createZeroMatrix(1);
     }
-    return submatrix;
+
 }

@@ -72,6 +72,7 @@ t_partition* tarjanAlgorithm(t_adjacency_list adjacency_list);
 void freePartition(t_partition* partition);
 int isVertexInClass(p_cell vertex, t_class* class);
 int isIndexInClass(int index, t_class* class);
+int doesClassExist (t_partition * part, int index);
 
 
 

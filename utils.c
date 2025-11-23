@@ -331,3 +331,10 @@ int isIndexInClass(int index, t_class* class) {
     }
     return 0;
 }
+
+int doesClassExist (t_partition * part, int index) {
+    if ((index < 0) || ( part->count) <= index) {
+        return 0;
+    }
+    return 1;
+}
