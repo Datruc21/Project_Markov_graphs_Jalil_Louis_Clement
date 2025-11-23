@@ -30,7 +30,6 @@ int main() {
         displayMatrix(submatrix, scc_partition->classes[i]->count);
         printf("\n");
         freeMatrix(submatrix, scc_partition->classes[i]->count);
-        printf("e");
     }
     freePartition(scc_partition);
     return 0;
