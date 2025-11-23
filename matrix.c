@@ -161,7 +161,9 @@ int getPeriod(float** sub_matrix,int n) {
     int *periods = (int *)calloc(n , sizeof(int));
     int period_count = 0;
     int cpt = 1;
-    float** power_matrix = identityMatrix(n);
+    float** power_matrix = createZeroMatrix(n);
+    copyMatrix(sub_matrix,power_matrix,n);
+    power_matrix = matrixMultiplication(power_matrix,sub_matrix,n);
     //for loop to get the last non zero diagonal M^k(i,i) != 0, with k being the current step
     for (cpt = 1; cpt <= n; cpt++)
     {

@@ -33,5 +33,6 @@ int main() {
         freeMatrix(submatrix, scc_partition->classes[i]->count);
     }
     freePartition(scc_partition);
+    freeMatrix(matrix, graph->size);
     return 0;
 }
