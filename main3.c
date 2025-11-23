@@ -25,7 +25,7 @@ int main() {
     float** matrix = createMatrix(graph);
     displayMatrix(matrix, graph->size);
     printf("\n--- Creating Submatrices (Part 3) ---\n");
-    for (int i = 0; i < scc_partition->size; i++) {
+    for (int i = 0; i < scc_partition->count; i++) {
         float** submatrix = subMatrix(matrix,scc_partition,i);
         displayMatrix(submatrix, scc_partition->classes[i]->count);
         printf("\n");

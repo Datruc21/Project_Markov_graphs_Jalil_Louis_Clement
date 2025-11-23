@@ -5,9 +5,9 @@
 #include "matrix.h"
 
 float** createZeroMatrix(int size) {
-    float** matrix = (float**)malloc(sizeof(float*)*size);
+    float** matrix = (float**)calloc(size,sizeof(float*));
     for (int i = 0; i<size; i++) {
-        matrix[i] = (float*)malloc(sizeof(float)*size);
+        matrix[i] = (float*)calloc(size,sizeof(float));
         for (int j = 0; j<size; j++) {
             matrix[i][j] = 0;
         }
@@ -18,6 +18,7 @@ float** createZeroMatrix(int size) {
 void copyMatrix(float** src, float** dest, int n) {
     for (int i = 0; i<n; i++) {
         for (int j = 0; j<n; j++) {
+            printf("%d %d \n",i,j);
             dest[i][j] = src[i][j];
         }
     }
@@ -99,4 +100,55 @@ float** subMatrix(float** matrix, t_partition * part, int compo_index) {
     } else {
         return NULL;
     }
+}
+
+int gcd(int *vals, int nbvals) {
+    if (nbvals == 0) return 0;
+    int result = vals[0];
+    for (int i = 1; i < nbvals; i++) {
+        int a = result;
+        int b = vals[i];
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        result = a;
+    }
+    return result;
+}
+
+int getPeriod(float** sub_matrix) {
+    int n = sizeof(sub_matrix[0]);
+    int *periods = (int *)calloc(n , sizeof(int));
+    int period_count = 0;
+    int cpt = 1;
+    float** power_matrix = createZeroMatrix(n);
+    float** result_matrix = createZeroMatrix(n);
+    displayMatrix((power_matrix), n);
+    printf("\n");
+    displayMatrix((result_matrix), n);
+    for (cpt = 1; cpt <= n; cpt++)
+    {
+        int diag_nonzero = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (power_matrix[i][i] > 0.0f)
+            {
+                diag_nonzero = 1;
+            }
+        }
+        if (diag_nonzero) {
+            periods[period_count] = cpt;
+            period_count++;
+        }
+        printf("d");
+        result_matrix == matrixMultiplication(power_matrix, sub_matrix, n);
+        printf("d");
+        copyMatrix(power_matrix, result_matrix, n);
+        printf("d");
+    }
+    free(periods);
+    freeMatrix(power_matrix, n);
+    return gcd(periods, period_count);
 }
