@@ -23,8 +23,15 @@ int main() {
     printf("\n--- Validation of Step 2 (Part 3) ---\n");
     printf("\n");
     float** matrix = createMatrix(graph);
-    float** submatrix1 = subMatrix(matrix,scc_partition,16);
     displayMatrix(matrix, graph->size);
     printf("\n--- Creating Submatrices (Part 3) ---\n");
-    displayMatrix(submatrix1, 1);
+    for (int i = 0; i < scc_partition->size; i++) {
+        float** submatrix = subMatrix(matrix,scc_partition,i);
+        displayMatrix(submatrix, scc_partition->classes[i]->count);
+        printf("\n");
+        freeMatrix(submatrix, scc_partition->classes[i]->count);
+        printf("e");
+    }
+    freePartition(scc_partition);
+    return 0;
 }
