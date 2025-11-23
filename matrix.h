@@ -6,6 +6,11 @@
 #define INC_2526_TI301_PJT_MATRIX_H
 
 /**
+ * @brief Allocates a square matrix initialized to 0.
+ */
+float** createZeroMatrix(int size);
+
+/**
  * @brief Converts the graph representation from an adjacency list to a transition matrix.
  * @param T Pointer to the graph's adjacency list.
  * @return A dynamically allocated 2D array (float**) representing transition probabilities.
@@ -63,5 +68,15 @@ int gcd(int *vals, int nbvals);
  * @return The period of the class (returns 1 if the class is aperiodic).
  */
 int getPeriod(float** sub_matrix, int n);
+
+/**
+ * @brief Copies content from src matrix to dest matrix.
+ */
+void copyMatrix(float** src, float** dest, int n);
+
+/**
+ * @brief Calculates the total absolute difference between two matrices.
+ */
+float differenceMatrices(float** A, float** B, int n);
 
 #endif //INC_2526_TI301_PJT_MATRIX_H
