@@ -2,6 +2,7 @@
 #include "hasse.h"
 
 p_link_array createLinkArray(int size) {
+    //Initializes a link array
     p_link_array link_array = (p_link_array)malloc(sizeof(t_link_array));
     link_array->log_size = 0;
     link_array->links = malloc(sizeof(t_link*) * size);
@@ -9,6 +10,7 @@ p_link_array createLinkArray(int size) {
 }
 
 int isThereALink(p_link_array T,t_class* I, t_class* J) {
+    //If there is a link between 2 classes : If we can join one from the other
     for (int i = 0; i < T->log_size; i++) {
         if ((T->links[i]->start == I->id && T->links[i]->end == J->id) ||
             (T->links[i]->start == J->id && T->links[i]->end == I->id)) {
@@ -19,6 +21,7 @@ int isThereALink(p_link_array T,t_class* I, t_class* J) {
 }
 
 void freeLinkArray(t_link_array* link_array) {
+    //Free the array of links
     for (int i = 0; i < link_array->log_size; i++) {
         free(link_array->links[i]);
     }
@@ -27,6 +30,7 @@ void freeLinkArray(t_link_array* link_array) {
 }
 
 t_link* createLink(int a, int b) {
+    //This function creates a link
     t_link* link = (t_link*)malloc(sizeof(t_link));
     link->start = a;
     link->end = b;
@@ -34,29 +38,38 @@ t_link* createLink(int a, int b) {
 }
 
 p_link_array makeHasseDiagram(t_adjacency_list* T) {
+    //Creates<
     p_link_array link_array = createLinkArray(T->size);
     t_partition* partition = tarjanAlgorithm(*T);
     for (int i = 0; i<T->size; i++) {
+        //For each vertex I
         t_class* classI = NULL;
         for (int j = 0; j<partition->count; j++){
             for (int k = 0; k < partition->classes[j]->count; k++) {
+                //If I is in the class
                 if (partition->classes[j]->vertices[k]->id == i) {
+                    //Keep this class
                     classI = partition->classes[j];
                     break;
                 }
             }
+            //Should not be happening but we never know
             if (classI != NULL) break;
         }
         p_cell current = T->lists[i]->head;
+        //For each vertex K adjacent to I
         while (current != NULL) {
             t_class* classK = NULL;
             for (int j = 0 ;j<partition->count; j++) {
                 if (isVertexInClass(current, partition->classes[j]))
+                    //Finds the class K belongs to
                     classK = partition->classes[j];
             }
             if (classK != NULL && classK->id != classI->id) {
+                //If it is not the same class, check if there is a link between them
                 if (!isThereALink(link_array,classI,classK)) {
                     link_array->links[link_array->log_size++] = createLink(classI->id, classK->id);
+                    //Add the link CLassI,ClassK to the array of links
                 }
             }
             current = current->next;
