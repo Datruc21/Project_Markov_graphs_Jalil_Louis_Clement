@@ -31,7 +31,7 @@ int main() {
     printf("------- Validation of Step 1 -------\n");
 
     // 1. Load the graph
-    t_adjacency_list* graph_step1 = readGraph("../data/exemple_valid_step3.txt");
+    t_adjacency_list* graph_step1 = readGraph("../data/exemple_meteo.txt");
     if (graph_step1 == NULL) {
         return 1;
     }

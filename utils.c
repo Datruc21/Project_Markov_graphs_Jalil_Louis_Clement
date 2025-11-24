@@ -127,13 +127,11 @@ void isMarkovGraph(t_adjacency_list* adjacency_list) {
             cell = cell->next;
         }
 
-        // Le sujet précise "entre 0.99 et 1", ce qui semble inclure 1.
-        // La version de tes camarades excluait 1.0. Corrigons cela aussi.
         if (sum < 0.99 || sum > 1.0) {
             printf("The graph is not a Markov graph\n");
             printf("the sum of the probabilities of vertex %d is %.2f\n", i + 1, sum);
             is_markov = 0;
-            break; // On a trouvé une erreur, on arrête la vérification.
+            break;
         }
     }
 
